@@ -1,5 +1,6 @@
 from pathlib import Path
 from config import MAX_CHARS
+from google.genai import types
 
 def get_file_content(working_directory, file_path):
     pwd_path = Path(working_directory).absolute()
@@ -20,3 +21,18 @@ def get_file_content(working_directory, file_path):
     except Exception as e:
         return f"Error: {str(e)}"
     return content
+
+schema_get_file_content = types.FunctionDeclaration(
+    name="get_file_content",
+    description="List the file content of a file relative to the working directory upto 10000 characters.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="File path to get the file content, relative to the working directory (default is the working directory itself)",
+            ),
+        },
+        required=["file_path"]
+    ),
+)
